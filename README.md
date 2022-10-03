@@ -21,18 +21,21 @@ msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사
 
 설치 agent의 설치 스크립트는 ansible로 작성되어 있으며 실행되어야 하므로 미리 ansible 설치가 필요합니다.
 
-
 ### ansible 설치
 
+ansible 설치방법에 대한 설명 
 
 ### 설치프로젝트 clone
 
+이 프로젝트를 다운로드하여 로컬(설치agent PC)에 받는 방법
+
 ### 설치대상정보 업데이트
 
+정상 실행을 위해 설치대상VM의 정보를 입력하는 방법
 
 ## 실행
 
-
+스크립트를 실행하여 설치를 수행하는 방법
 
 ## 참고
 
