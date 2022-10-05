@@ -1,0 +1,109 @@
+---
+######## argocd #########
+
+- name: "[필수사항 체크] Ingress Controller 설치 여부 체크"
+  ansible.builtin.shell: | 
+    kubectl get pod -n {{GLB_INGRESS_NAMESPACE}} | grep {{ARGOCD_INGRESS_CLASS}} |wc -l
+  register: output
+  failed_when:  "output.stdout|float < 1"
+  tags:
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  
+  
+
+
+- name: argocd 설치
+  shell: |
+    kubectl create ns argocd
+    kubectl -n argocd apply  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    sleep 20
+    kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n argocd  > /dev/null
+  
+  register: output
+  tags: 
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  
+# blue-green,canary를 위한 플러그인
+- name: argo-rollouts 설치 
+  shell: |
+    kubectl create ns argo-rollouts
+    kubectl apply -n argo-rollouts  -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+    kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n  argo-rollouts  > /dev/null
+  register: output
+  tags:
+    - argo-rollouts
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  when: ARGO_ROLLOUTS_YN == 'Y' 
+
+# 자동으로 변경된 이미지의 버전을 gitops에 업데이트 해주는 플러그인
+# 마지막 sleep은 다음 task에서 오류가 빈번하게 발생하여 넣었음.
+- name: argocd image_updater 설치 
+  shell: |
+    kubectl -n argocd apply  -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
+    kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n argocd  > /dev/null
+    sleep 10
+  register: output
+  tags: 
+    - argocd-imagupdater
+    - argocd
+  when: ARGOCD_IMAGE_UPDATEER_YN == 'Y' 
+
+- debug:
+    var: output
+  tags:
+    - argocd-imagupdater 
+    - argocd
+
+
+
+
+- name: argocd ingress 설치 
+  kubernetes.core.k8s: #template을 이용해 ingress생성시 동적으로 생성
+    state: present
+    template: 
+      - path: "argocd/argocd-ingress.yml.j2"
+  register: output
+  tags: 
+    - argocd-ing
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  when: ARGOCD_INGRESS_YN == 'Y' and ARGOCD_INGRESS_CLASS == 'nginx'
+
+- debug:
+    var: output
+  tags: 
+    - argocd-ing
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+
+# argocd를 위한 ingress 생성 후 적용될때까지 다소 시간이 소요됨(sleep 10은 그런 상황을 위한 부분임)
+- name: agrocd  change account password
+  shell: |
+    sleep 10
+    PASSWORD="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo )"
+    argocd login --insecure {{ARGOCD_HOST}}  --username admin  --password $PASSWORD 
+    argocd account update-password --current-password $PASSWORD  --new-password {{ARGOCD_NEW_PASSWORD}}
+  register: output
+  tags: 
+    - argocd-pwd
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  when: ARGOCD_INGRESS_YN == 'Y'
+
+- debug:
+    var: output
+  tags:
+    - arogocd-pwd
+    - argocd
+    - demo-ex
+    - demo-ex-argocd
+  when: ARGOCD_INGRESS_YN == 'Y'

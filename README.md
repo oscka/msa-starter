@@ -27,8 +27,15 @@ msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사
 
 ### ansible 설치
 
-(작성중) ansible 설치방법 설명
+- 공식 document - https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+  - 설치 가이드를 참고하여 설치를 수행합니다. 버전에 따라 오동작할 수 있으며 2022.10기준 최신버전은 core 2.13.4 입니다.
+  - 설치 후 다음과 같이 대상을 인벤토리에 등록하여 ping 테스트를 수행합니다.
 
+```bash
+# export ANSIBLE_HOST_KEY_CHECKING=False  # ssh key check를 무시하는 ssh설정
+ansible -i hosts-vm all -m ping
+# ansible all -m ping
+```
 ### 설치프로젝트 clone
 
 설치 프로젝트를 로컬에 clone 하여 다운로드 합니다.
@@ -42,19 +49,20 @@ git clone https://github.com/oscka/msa-starter-kit.git
 
 ansible에서는 설치 대상 정보를 인벤토리(Inventory) 라는 개념으로 관리하며 인벤토리 정보를 설치 대상 VM정보에 맞게 업데이트 해 주어야 합니다.
 
-기본
+기본적으로 host_ip, user_name, port등이 이에 해당됩니다.
+기본 설치 계정은 클라우드 환경 또는 vagrant를 통해 생성시 sudo 권한을 가지고 있습니다. 이에 따라 설치와 관련된 권한은 root(become=true)를 이용할 수 있으며 설치 후 해당 계정을 계속 이용할 것인지는 상황에 맞게 판단합니다.
 
 ```bash
 ; group_name
 [vms]
 ;vm_name ansible_host_ip ansible_user_name ansible_port ansible_ssh_private_key_file
-step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ssh_private_key_file=/home/ska/git/oscka/ansible-handson/test-vm1/.vagrant/machines/default/virtualbox/private_key
-#step2 ansible_host=192.168.56.20 ansible_user=vagrant ansible_port=22 ansible_ssh_private_key_file=/home/ska/git/oscka/ansible-handson/test-vm2/.vagrant/machines/default/virtualbox/private_key
+step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ssh_private_key_file=../test-vm1/.vagrant/machines/default/virtualbox/private_key
 ```
 
 
 ## 실행
 
-(작성중) 스크립트를 실행하여 설치를 수행하는 방법-향후 프로젝트 구조에 따라
-
-## 참고
+다음과 같이 스크립트를 실행하여 설치를 수행합니다. 
+```bash
+./run-play.sh  "tool-basic, helm-repo,k3s, ingress-nginx, argocd, loki-stack, pinpoint, mysql, demo-api-argocd,demo-fe-argocd"
+```

@@ -1,0 +1,9 @@
+# - hosts: localhost
+# - hosts: "{{ HOSTS }}"
+- hosts: all
+  vars:
+    - ROLES_PATH: ../roles
+  roles:   ## 순서 중요(바뀌면 안됨)   
+    - role: "{{ROLES_PATH}}/role-tools"
+    - role: "{{ROLES_PATH}}/role-k8s-apps"
+    - role: "{{ROLES_PATH}}/role-k8s-demo-service"

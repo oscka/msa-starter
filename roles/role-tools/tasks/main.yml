@@ -1,0 +1,14 @@
+---
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: always
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install on ubuntu 
+  import_tasks: install.yml    
+
+- name: Print all available facts
+  ansible.builtin.debug:
+    var: ansible_facts
+  tags: 
+    - facts
