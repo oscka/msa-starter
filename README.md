@@ -62,7 +62,27 @@ step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ss
 
 ## 실행
 
+프로젝트의 구성은 다음과 같습니다.
+```
+.
+├── playbooks                   # playbook 경로, script 실행경로
+├── roles                       # 설치 role 경로
+│   ├── role-k8s-apps
+│   │   ├── defaults
+│   │   ├── files
+│   │   ├── handlers
+│   │   ├── meta
+│   │   ├── tasks
+│   │   ├── templates
+│   │   ├── tests
+│   │   └── vars
+│   ├── role-k8s-demo-service
+│   └── role-tools
+└── test-vm1                    # vagrant vm 경로
+```
+
 다음과 같이 스크립트를 실행하여 설치를 수행합니다. 
 ```bash
+cd playbook
 ./run-play.sh  "tool-basic, helm-repo,k3s, ingress-nginx, argocd, loki-stack, pinpoint, mysql, demo-api-argocd,demo-fe-argocd"
 ```
