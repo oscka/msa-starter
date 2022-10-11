@@ -46,7 +46,8 @@
 - name: import gateway
   import_tasks: kong-gw.yml
 
-
+- name: import jenkins
+  import_tasks: jenkins.yml
   
 
  
