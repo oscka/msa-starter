@@ -150,11 +150,22 @@
 - name: kustomize 설치
   shell: |
     curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+    sudo mv kustomize /usr/local/bin/
   args:
     chdir: "{{ INSTALL_DOWN_ROOT }}/down/"
   tags: 
     - kustomize 
-    
+
+
+- name: skaffold 설치
+  shell: |
+    curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+    sudo install skaffold /usr/local/bin/
+  args:
+    chdir: "{{ INSTALL_DOWN_ROOT }}/down/"
+  tags: 
+    - skaffold 
+
 
 ###### [post]
 - name: post install 
