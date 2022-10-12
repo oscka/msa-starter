@@ -15,7 +15,7 @@ msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사
 - 설치 Agent - github에서 ansible code를 받아 실행할 PC또는 notebook.
 - 설치대상 VM - 개발환경 혹은 테스트환경으로 이용할 VM 혹은 서버, 설치할 솔루션 혹은 app에 따라 높은 사양이 필요할 수 있음
 
-![image](https://user-images.githubusercontent.com/2344830/193701469-c1f086b9-92ee-48fb-8e19-76448140d596.png)
+![image](https://user-images.githubusercontent.com/112376183/195263573-d76fd0a9-61b1-47fc-a025-0469da92af92.png)
 
 ## 준비
 
