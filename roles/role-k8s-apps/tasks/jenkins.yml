@@ -1,0 +1,47 @@
+---
+# jenkins는 클러스터 밖에 설치를 시작함
+
+# jenkins 구동을 위하여 jdk가 필요
+- name: "jenkins installation at host vm : install jdk"
+  shell: | 
+    sudo apt install openjdk-17-jdk -y
+  tags:
+    - jenkins
+    - openjdk
+    - demo-ex
+    - demo-ex-jenkins
+
+# 재실행시에도 돌도록 wget -l, gpg --batch --yes 로 덮어쓰기
+- name: "jenkins installation at host vm : get pgp key"
+  shell: |    
+    wget -l -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |sudo gpg --batch --yes --dearmor -o /usr/share/keyrings/jenkins.gpg
+  tags:
+    - jenkins
+    - demo-ex
+    - demo-ex-jenkins
+
+- name: "jenkins installation at host vm : install jenkins"
+  shell: | 
+    sudo sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    sudo apt update
+    sudo apt install jenkins -y
+  register: output
+  tags:
+    - jenkins
+    - demo-ex
+    - demo-ex-jenkins
+  
+- debug:
+    var: output
+  tags: 
+    - jenkins
+    - demo-ex
+    - demo-ex-jenkins
+
+# 향후 아래와 같은 부분의 코드화가 필요
+# 위 방법으로 jenkins 설치 후 
+# jenkins계정에 docker 실행권한 부여 
+# docker-pipeline, git parameter, workspace cleanup 플러그인 설치
+# git-credential, imageRegistry-credential 생성
+
+# configuration as a code 의 경우 설정 자체만 옮겨지는 듯 함(job은 안됨, 비번들은 옮겨짐)

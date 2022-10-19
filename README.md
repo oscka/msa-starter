@@ -84,5 +84,46 @@ step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ss
 다음과 같이 스크립트를 실행하여 설치를 수행합니다. 
 ```bash
 cd playbook
-./run-play.sh  "tool-basic, helm-repo,k3s, ingress-nginx, argocd, loki-stack, pinpoint, mysql, demo-api-argocd,demo-fe-argocd"
+# 전체 설치
+./run-play.sh  "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, argocd, loki-stack, pinpoint, mysql, demo-api-argocd, demo-fe-argocd"
+
+# 기본 도구만 설치(cluster,kubectl,k9s등)
+./run-play.sh  "tool-basic, helm-repo, k3s"
+
+# 기본 도구 설치 후 cicd 도구 설치(의존성이 필요한 경우를 제외하고 해당 도구만 설치할 수 있음)
+# 서비스 노출을 위해서는 ingress-nginx 가 먼저 설치되어 있어야 함
+./run-play.sh  "ingress-nginx, argocd"
 ```
+
+## 주의
+
+### Jenkins 설치 및 CI구성
+
+Jenkins의 경우 job실행 속도 문제로 클러스터 밖의 환경에 별도로 설치하도록 구성되어 있으며 설치만 수행하고 있음
+이후 아래와 같은 작업이 필요하다.
+
+```bash
+#1.jenkins계정에 docker 실행권한 부여(재시작,재로그인 후 반영)
+sudo usermod -aG docker jenkins
+sudo service docker restart
+
+#2.계정 생성 및 비밀번호 변경
+#admin/admin1234 로 관리자 계정 생성(UI에서)
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+#3.로그인 후 플러그인 설치
+# 플러그인 3개 - git parameter, workspace cleanup, docker pipeline
+
+#4.secret 생성 - git-credential, imageRegistry-credential
+#jenkins관리 - credential상에 위의 이름으로 생성하고 각각 github의 accesstoken 정보와 docker hub의 ID/PW정보를 입력해 둔다.
+
+#5.job 생성
+#- sample-api-build를 pipeline job으로 생성
+#- 이 빌드는 매개변수가 있습니다. 를 선택하여 TAG를 입력
+#- pipeline script는 SCM에서 가져온 Jenkinsfile을 선택
+
+#6. 빌드 도구 설치
+# skaffold, kustomize 설치
+# jenkins계정에서 docker 수행이 가능해야 함
+```
+
