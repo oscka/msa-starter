@@ -95,3 +95,31 @@ cd playbook
 ./run-play.sh  "ingress-nginx, argocd"
 ```
 
+## 주의
+
+### Jenkins 설치 및 CI구성
+
+Jenkins의 경우 job실행 속도 문제로 클러스터 밖의 환경에 별도로 설치하도록 구성되어 있으며 설치만 수행하고 있음
+이후 아래와 같은 작업이 필요하다.
+
+```bash
+#1.jenkins계정에 docker 실행권한 부여(재시작,재로그인 후 반영)
+sudo usermod -aG docker jenkins
+sudo service docker restart
+
+#2.계정 생성 및 비밀번호 변경
+#admin/admin1234 로 관리자 계정 생성(UI에서)
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+#3.로그인 후 플러그인 설치
+# 플러그인 3개 - git parameter, workspace cleanup, docker pipeline
+
+#4.secret 생성 - git-credential, imageRegistry-credential
+#jenkins관리 - credential상에 위의 이름으로 생성하고 각각 github의 accesstoken 정보와 docker hub의 ID/PW정보를 입력해 둔다.
+
+#5.job 생성
+#- sample-api-build를 pipeline job으로 생성
+#- 이 빌드는 매개변수가 있습니다. 를 선택하여 TAG를 입력
+#- pipeline script는 SCM에서 가져온 Jenkinsfile을 선택
+```
+
