@@ -121,5 +121,9 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
 #- sample-api-build를 pipeline job으로 생성
 #- 이 빌드는 매개변수가 있습니다. 를 선택하여 TAG를 입력
 #- pipeline script는 SCM에서 가져온 Jenkinsfile을 선택
+
+#6. 빌드 도구 설치
+# skaffold, kustomize 설치
+# jenkins계정에서 docker 수행이 가능해야 함
 ```
 
