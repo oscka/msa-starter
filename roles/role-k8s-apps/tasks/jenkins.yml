@@ -1,5 +1,16 @@
 ---
 # jenkins는 클러스터 밖에 설치를 시작함
+
+# jenkins 구동을 위하여 jdk가 필요
+- name: "jenkins installation at host vm : install jdk"
+  shell: | 
+    sudo apt install openjdk-17-jdk -y
+  tags:
+    - jenkins
+    - openjdk
+    - demo-ex
+    - demo-ex-jenkins
+
 - name: "jenkins installation at host vm : get pgp key"
   shell: | 
     wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |sudo gpg --dearmor -o /usr/share/keyrings/jenkins.gpg
