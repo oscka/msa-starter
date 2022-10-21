@@ -1,6 +1,6 @@
 
 	
-use blackstar;
+use sampledb;
 	
 	
 CREATE TABLE `board` (
