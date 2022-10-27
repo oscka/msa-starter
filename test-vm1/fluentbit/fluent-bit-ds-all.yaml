@@ -58,6 +58,7 @@ spec:
         imagePullPolicy: Always
         ports:
           - containerPort: 2020
+        ### CUSTOM: update elasticsearch host info
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
           value: "10.133.59.186"
@@ -116,11 +117,12 @@ data:
     @INCLUDE filter-kubernetes.conf
     @INCLUDE output-elasticsearch.conf
 
+  ### CUSTOM: add necessary pods log
   input-kubernetes.conf: |
     [INPUT]
         Name              tail
         Tag               kube.*
-        Path              /var/log/containers/*.log
+        Path              /var/log/containers/sample-api*.log, /var/log/containers/ingress-nginx*.log
         Parser            docker
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     5MB

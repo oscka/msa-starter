@@ -115,6 +115,7 @@ data:
     <source>
       @type tail
       @id in_tail_container_logs
+      ### CUSTOM: add necessary pods log
       path /var/log/containers/*.log
 
       ### CUSTOM: exclude unnecessary pods log
