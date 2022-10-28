@@ -87,12 +87,16 @@ cd playbook
 # 전체 설치
 ./run-play.sh  "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, argocd, loki-stack, pinpoint, mysql, demo-api-argocd, demo-fe-argocd"
 
-# 기본 도구만 설치(cluster,kubectl,k9s등)
+# 기본 환경만 설치(cluster,kubectl,k9s등)
 ./run-play.sh  "tool-basic, helm-repo, k3s"
 
-# 기본 도구 설치 후 cicd 도구 설치(의존성이 필요한 경우를 제외하고 해당 도구만 설치할 수 있음)
+# 기본 환경 설치 후 cicd 도구 설치(의존성이 필요한 경우를 제외하고 해당 도구만 설치할 수 있음)
 # 서비스 노출을 위해서는 ingress-nginx 가 먼저 설치되어 있어야 함
 ./run-play.sh  "ingress-nginx, argocd"
+
+# 기본환경+shell환경만 설치(ohmyzsh+자동완성)
+# oh-my-zsh+auto complete+alias...
+./run-play.sh  "tool-basic,ohmyzsh"
 ```
 
 ## 참고

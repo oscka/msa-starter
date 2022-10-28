@@ -45,7 +45,7 @@
 - name: "oh-my-zsh 설치"
   shell: |
     chmod u+x {{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh
-    nohup sh -c {{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh &
+    nohup sh -c {{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh
   tags: 
   - ohmyzsh
   - tool-ext
@@ -63,6 +63,16 @@
     src: my.zshrc.j2
     dest: "~/.zshrc"
   tags: 
+  - ohmyzsh
+  - tool-ext
+
+- name: "기본 쉘 zsh로 변경"
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /bin/zsh
+  tags: 
+  - zsh
   - ohmyzsh
   - tool-ext
 

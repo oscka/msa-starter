@@ -4,3 +4,22 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 source $ZSH/oh-my-zsh.sh
+#=========alias=======
+alias k='kubectl'
+alias kg='kubectl get $1'
+alias ktail='kubetail'
+alias sff='skaffold'
+alias wall='watch kubectl get all -n $1'
+alias wpod='watch kubectl get pod -n $1'
+alias wpodA='watch kubectl get pod -A'
+##kubectx
+alias kctx='kubectx'
+##kubens
+alias kns='kubens'
+alias s-alias='alias |grep $1'
+##docker
+alias dk='docker'
+alias dkc='docker-compose'
+alias vagrant='v'
+### kafka
+alias kcat='kafkacat'
