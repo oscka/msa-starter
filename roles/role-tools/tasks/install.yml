@@ -22,6 +22,55 @@
     - ansible-module
     - tool-basic
 
+
+- name: "zsh 설치"
+  apt: 
+    name: zsh
+  become: true
+  tags: 
+  - zsh
+  - ohmyzsh
+  - tool-ext
+
+# install_ohmyzsh가 silent install이 되지 않아 install shell자체를 수정함
+# 향후 버전업등시 모니터링 필요
+- name: "oh-my-zsh 다운로드"
+  template:
+    src: install_ohmyzsh.sh.j2
+    dest: "{{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh"
+  tags: 
+  - ohmyzsh
+  - tool-ext
+
+- name: "oh-my-zsh 설치"
+  shell: |
+    chmod u+x {{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh
+    nohup sh -c {{ INSTALL_DOWN_ROOT }}/down/install_ohmyzsh.sh &
+  tags: 
+  - ohmyzsh
+  - tool-ext
+
+- name: "oh-my-zsh 플러그인 설치"
+  shell: |
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  tags: 
+  - ohmyzsh
+  - tool-ext
+
+- name: "oh-my-zsh 설정 적용"
+  template:
+    src: my.zshrc.j2
+    dest: "~/.zshrc"
+  tags: 
+  - ohmyzsh
+  - tool-ext
+
+- name: reset ssh connection to allow user changes to affect 'current login user'
+  meta: reset_connection
+  tags: 
+    - ohmyzsh
+    - tool-ext
     
 - name: "docker 설치"
   shell: |  

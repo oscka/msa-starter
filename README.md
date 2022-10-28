@@ -95,7 +95,7 @@ cd playbook
 ./run-play.sh  "ingress-nginx, argocd"
 ```
 
-## 주의
+## 참고
 
 ### Jenkins 설치 및 CI구성
 
