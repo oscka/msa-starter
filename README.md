@@ -81,7 +81,8 @@ step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ss
 └── test-vm1                    # vagrant vm 경로
 ```
 
-다음과 같이 스크립트를 실행하여 설치를 수행합니다. 
+다음과 같이 상황에 맞게 스크립트를 실행하여 설치를 수행합니다. 기본이 되는 태그는 tool-basic 이고(설치되어 있어야 다른 설치시 오류가 발생하지 않음), argocd, pinpoint등 외부로 연결되어야 하는 솔루션은 ingress-nginx가 미리 설치되어 있어야 설치가 가능합니다.
+
 ```bash
 cd playbook
 # 전체 설치
@@ -96,7 +97,7 @@ cd playbook
 
 # 기본환경+shell환경만 설치(ohmyzsh+자동완성)
 # oh-my-zsh+auto complete+alias...
-./run-play.sh  "tool-basic,ohmyzsh"
+./run-play.sh  "tool-basic, ohmyzsh"
 ```
 
 ## 참고
