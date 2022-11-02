@@ -1,9 +1,10 @@
+VMHOSTNAME="test-vm1"
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
 
 Vagrant.configure("2") do |config|
 
   ##### DEFINE VM #####
-  config.vm.define "test-vm1" do |config|
+  config.vm.define VMHOSTNAME do |config|
   config.vm.hostname = VMHOSTNAME
   config.vm.box = "generic/ubuntu2204"
   config.vm.box_check_update = false
