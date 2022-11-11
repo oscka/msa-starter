@@ -49,5 +49,6 @@
 - name: import jenkins
   import_tasks: jenkins.yml
   
-
+- name: import locust
+  import_tasks: locust.yml
  

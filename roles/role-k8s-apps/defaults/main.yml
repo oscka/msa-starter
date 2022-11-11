@@ -126,3 +126,13 @@ MYSQL_ROOT_PASSWORD: "root"
 MYSQL_USER_NAME: "oscer"
 MYSQL_USER_PASSWORD: "oscer1234"
 
+
+
+########### locust ##################
+LOCUST_CHART: "deliveryhero/locust"
+LOCUST_CHART_VERSION: "0.27.1"
+LOCUST_NAMESPACE: "locust-system"
+LOCUST_DEFAULT_HOST: "http://localhost:8080"
+LOCUST_WORKER_REPLICAS: 3
+LOCUST_INGRESS_CLASS: "nginx"
+LOCUST_INGRESS_HOST: "locust.{{HOST_IP}}.sslip.io"

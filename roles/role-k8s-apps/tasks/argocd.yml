@@ -102,7 +102,7 @@
 - debug:
     var: output
   tags:
-    - arogocd-pwd
+    - argocd-pwd
     - argocd
     - demo-ex
     - demo-ex-argocd

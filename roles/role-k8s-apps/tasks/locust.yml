@@ -1,0 +1,85 @@
+---
+
+######## locust #########
+- name: "[필수사항 체크] Ingress Controller 설치 여부 체크"
+  ansible.builtin.shell: | 
+    kubectl get pod -n {{GLB_INGRESS_NAMESPACE}} | grep {{LOCUST_INGRESS_CLASS}} |wc -l
+  register: output
+  failed_when:  "output.stdout|float < 1"
+  tags:
+    - locust-ing
+    - locust
+
+- name: locust-system  namespace 생성
+  k8s:
+    name: "{{LOCUST_NAMESPACE}}"
+    api_version: v1
+    kind: Namespace
+    state: present
+  tags: 
+    - locust
+
+- name: locust locustfile configmap 생성 
+  kubernetes.core.k8s:
+    state: present
+    definition: 
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        name: loadtest-locustfile  
+        namespace: "{{LOCUST_NAMESPACE}}"
+      data:
+       main.py: "{{ lookup('template', 'locust/main.py.j2')  }}"
+  register: output
+  tags: 
+    - locust
+
+#---out---
+- debug:
+    var: output
+  tags: 
+    - locust
+
+- name: locust  설치
+  kubernetes.core.helm:
+    name: locust
+    chart_ref: "{{LOCUST_CHART}}"
+    chart_version: "{{LOCUST_CHART_VERSION}}"
+    release_namespace: "{{LOCUST_NAMESPACE}}"
+    create_namespace: true
+    update_repo_cache: "{{HELM_UPDATE_REPO_CACHE}}"
+    wait: true
+    values:
+      loadtest:
+        name: app-loadtest
+        locust_locustfile_configmap: loadtest-locustfile
+        locust_host: "{{LOCUST_DEFAULT_HOST}}"
+      worker:
+        replicas: "{{LOCUST_WORKER_REPLICAS}}"
+  register: output
+  tags: 
+    - locust
+  
+#---out---
+- debug:
+    var: output
+  tags: 
+    - locust
+
+- name: locust  ingress 배포 
+  kubernetes.core.k8s:
+    state: present
+    template: 
+      - path: "locust/locust-ingress.yml.j2"
+  register: output
+  tags: 
+    - locust-ing
+    - locust
+
+#---out---
+- debug:
+    var: output
+  tags: 
+    - locust-ing
+    - locust
+    
