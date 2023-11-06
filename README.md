@@ -67,7 +67,7 @@ step1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_port=22 ansible_ss
 
 vagrant vm은 기본적으로 모든 계정이 vagrant로 통일되어 있으므로, 이를 다른 환경에서 실행하기 위해서는 다음과 같이 계정정보 및 ssh 키 정보를 미리 설정해두어야 한다. 
 
-```
+```zsh
 ➜ cat ./hosts-vm
 [vms]
 ;local에서 local로 설치하기 위해 로컬의 .ssh하위에 생성된 키로 등록
@@ -78,7 +78,7 @@ step1 ansible_host=172.20.130.45 ansible_user=ska ansible_port=22 ansible_ssh_pr
 
 id_ecdsa는 타원 곡선 암호화 알고리즘을 통해 생성한 비밀키이며 다음과 같이 실행하여 생성하고, 이미 서버에 등록하고 키를 통해 접속이 가능한지 확인해둔다.
 
-```
+```zsh
 # 키 생성 
 ssh-keygen -t ecdsa
 # 키를 등록한 뒤, 해당 서버에 한 번 접속하여 키로 접속되는지 확인한다.
@@ -90,10 +90,10 @@ ssh 계정명@서버IP주소
 
 vagrant 상에서는 sudo 명령을 실행하기 위해 비밀번호 없이 수행이 가능하다. 이와 같이 설정하기 위해 아래와 같이 생성한 myuser라는 계정에 sudo권한을 비번 없이 실행할 수 있도록 부여하여야 한다.
 
-```
+```zsh
 # sudo권한 일반계정에 부여하기
-[root@localhost ~]# echo 'myuser ALL=NOPASSWD: ALL' >> /etc/sudoers
-[root@localhost ~]# cat /etc/sudoers | tail -2
+echo 'myuser ALL=NOPASSWD: ALL' >> /etc/sudoers
+cat /etc/sudoers | tail -2
 #includedir /etc/sudoers.d
 myuser ALL=NOPASSWD: ALL
 ```
