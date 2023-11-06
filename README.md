@@ -10,10 +10,10 @@ msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사
 
 ### starter-kit 구성도
 
-다음 그림과 같이 설치 Agent가 github의 script code를 받아 설치대상 VM에 설치하도록 되어 있습니다.
+다음 그림과 같이 설치 Agent가 github의 script code를 받아 설치대상 vagrant VM에 설치하도록 되어 있다.
 
 - 설치 Agent - github에서 ansible code를 받아 실행할 PC또는 notebook.
-- 설치대상 VM - 개발환경 혹은 테스트환경으로 이용할 VM 혹은 서버, 설치할 솔루션 혹은 app에 따라 높은 사양이 필요할 수 있음
+- 설치대상 VM - 개발환경 혹은 테스트환경으로 이용할 VM 혹은 서버, 설치할 솔루션 혹은 app에 따라 높은 사양이 필요할 수 있음. 샘플 환경은 vagrant를 이용한 VM을 기준으로하며 실제 원격 서버 등에 설치할 경우 ssh키 등록 및 sudo 권한 등록 및 추가작업이 필요하다.
 
 ![image](https://user-images.githubusercontent.com/112376183/195263573-d76fd0a9-61b1-47fc-a025-0469da92af92.png)
 
