@@ -2,11 +2,11 @@
 
 ## 소개
 
-msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사용자는 이 starter kit을 통하여
+msa(MicroService Architecture)를 시작하기 위한 starter kit. 사용자는 이 starter kit을 통하여
 가지고 있는 VM 또는 Cloud 환경(AWS,Azure,GCP..)에 MSA Architecure를 설치하고
-서비스를 구성하여 테스트하고 이를 devops환경으로 이용할 수 있습니다.
+서비스를 구성하여 테스트하고 이를 devops환경으로 이용할 수 있다.
 
-사용자는 이 starter-kit을 통하여 msa를 구성하는 outer, inner 아키텍처의 기본 구성요소를 자유롭게 선택하여 환경을 구성하고 설치, 제거할 수 있습니다.
+사용자는 이 starter-kit을 통하여 msa를 구성하는 outer, inner 아키텍처의 기본 구성요소를 자유롭게 선택하여 환경을 구성하고 설치, 제거할 수 있다.
 
 ### starter-kit 구성도
 
@@ -19,17 +19,17 @@ msa(MicroService Architecture)를 시작하기 위한 starter kit 입니다. 사
 
 ## 준비
 
-설치 및 실행을 위해 우선은 설치 agent로 사용할 pc와 설치할 대상이 필요합니다.
+설치 및 실행을 위해 우선은 설치 agent로 사용할 pc와 설치할 대상이 필요하다.
 설치 대상은 vm이면 무엇이든 상관 없습니다(vagrant,azure,aws,gcp)만, 설치 agent로 사용할 pc와 설치대상은
-네트워크로 연결 가능해야 합니다(port 22,6443)
+네트워크로 연결 가능해야 한다(port 22,6443)
 
-설치 agent의 설치 스크립트는 ansible로 작성되어 있으며 실행되어야 하므로 미리 ansible 설치가 필요합니다.
+설치 agent의 설치 스크립트는 ansible로 작성되어 있으며 실행되어야 하므로 미리 ansible 설치가 필요하다.
 
 ### ansible 설치
 
 - 공식 document - https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
-  - 설치 가이드를 참고하여 설치를 수행합니다. 버전에 따라 오동작할 수 있으며 2022.10기준 최신버전은 core 2.13.4 입니다.
-  - 설치 후 다음과 같이 대상을 인벤토리에 등록하여 ping 테스트를 수행합니다.
+  - 설치 가이드를 참고하여 설치를 수행한다. 버전에 따라 오동작할 수 있으며 2022.10기준 최신버전은 core 2.13.4 이다.
+  - 설치 후 다음과 같이 대상을 인벤토리에 등록하여 ping 테스트를 수행한다.
 
 ```bash
 # export ANSIBLE_HOST_KEY_CHECKING=False  # ssh key check를 무시하는 ssh설정
@@ -38,7 +38,7 @@ ansible -i hosts-vm all -m ping
 ```
 ### 설치프로젝트 clone
 
-설치 프로젝트를 로컬에 clone 하여 다운로드 합니다.
+설치 프로젝트를 로컬에 clone 하여 다운로드 한다.
 
 ```bash
 git clone https://github.com/oscka/msa-starter-kit.git
@@ -47,10 +47,10 @@ git clone https://github.com/oscka/msa-starter-kit.git
 
 ### 설치대상정보 업데이트
 
-ansible에서는 설치 대상 정보를 인벤토리(Inventory) 라는 개념으로 관리하며 인벤토리 정보를 설치 대상 VM정보에 맞게 업데이트 해 주어야 합니다.
+ansible에서는 설치 대상 정보를 인벤토리(Inventory) 라는 개념으로 관리하며 인벤토리 정보를 설치 대상 VM정보에 맞게 업데이트 해 주어야 한다.
 
-기본적으로 host_ip, user_name, port등이 이에 해당됩니다.
-기본 설치 계정은 클라우드 환경 또는 vagrant를 통해 생성시 sudo 권한을 가지고 있습니다. 이에 따라 설치와 관련된 권한은 root(become=true)를 이용할 수 있으며 설치 후 해당 계정을 계속 이용할 것인지는 상황에 맞게 판단합니다.
+기본적으로 host_ip, user_name, port등이 이에 해당된다.
+기본 설치 계정은 클라우드 환경 또는 vagrant를 통해 생성시 sudo 권한을 가지고 있습니다. 이에 따라 설치와 관련된 권한은 root(become=true)를 이용할 수 있으며 설치 후 해당 계정을 계속 이용할 것인지는 상황에 맞게 판단한다.
 
 ```bash
 ; group_name
