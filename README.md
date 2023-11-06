@@ -140,12 +140,26 @@ cd playbook
 
 ## 참고
 
-### Jenkins 설치 및 CI구성
+### Jenkins 설치 
 
-Jenkins의 경우 job실행 속도 문제로 클러스터 밖의 환경에 별도로 설치하도록 구성되어 있으며 설치만 수행하고 있음
+Jenkins의 경우 job실행 속도 문제로 클러스터 밖의 환경에 별도로 설치하도록 구성하는 방법을 기준으로 한다.
+
+```zsh
+# jenkins 실행을 위한 jdk설치(2023.11 현재)
+sudo apt-get install openjdk-11-jdk
+# apt key 추가
+wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+# apt address 추가
+echo deb http://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list
+# apt key 등록
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys FCEF32E745F2C3D5
+```
+
+### CI구성
+
 이후 아래와 같은 작업이 필요하다.
 
-```bash
+```zsh
 #1.jenkins계정에 docker 실행권한 부여(재시작,재로그인 후 반영)
 sudo usermod -aG docker jenkins
 sudo service docker restart
@@ -158,7 +172,7 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
 # 플러그인 3개 - git parameter, workspace cleanup, docker pipeline
 
 #4.secret 생성 - git-credential, imageRegistry-credential
-#jenkins관리 - credential상에 위의 이름으로 생성하고 각각 github의 accesstoken 정보와 docker hub의 ID/PW정보를 입력해 둔다.
+# jenkins관리 - credential상에 위의 이름으로 생성하고 각각 github의 accesstoken 정보와 docker hub의 ID/PW정보를 입력해 둔다.
 
 #5.job 생성
 #- sample-api-build를 pipeline job으로 생성
