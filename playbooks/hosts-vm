@@ -3,4 +3,4 @@
 ;step1 ansible_host=192.168.56.20 ansible_user=vagrant ansible_port=22 ansible_ssh_private_key_file=/home/ska/git/oscka/ansible-handson/test-vm2/.vagrant/machines/default/virtualbox/private_key
 ;local에서 local로 설치하기 위해 로컬의 .ssh하위에 생성된 키로 등록
 ;사전에 ssh-copy-id 명령으로 로그인을 한 번 해줘야 한다.
-step1 ansible_host=172.20.130.45 ansible_user=ska ansible_port=22 ansible_ssh_private_key_file=/home/ska/.ssh/id_ecdsa
+step1 ansible_host=192.168.56.11 ansible_user=vagrant ansible_port=22 ansible_ssh_private_key_file=/home/vagrant/.ssh/id_rsa

@@ -1,5 +1,6 @@
 ---
 # jenkins는 클러스터 밖에 설치를 시작함
+# 설치 자체는 https://velog.io/@thdrldud369/Jenkins-%EC%84%A4%EC%B9%98 를 참고함
 
 # jenkins 구동을 위하여 jdk가 필요
 - name: "jenkins installation at host vm : install jdk"
@@ -14,7 +15,7 @@
 # 재실행시에도 돌도록 wget -l, gpg --batch --yes 로 덮어쓰기
 - name: "jenkins installation at host vm : get pgp key"
   shell: |    
-    wget -l -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key |sudo gpg --batch --yes --dearmor -o /usr/share/keyrings/jenkins.gpg
+    wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
   tags:
     - jenkins
     - demo-ex
@@ -22,7 +23,7 @@
 
 - name: "jenkins installation at host vm : install jenkins"
   shell: | 
-    sudo sh -c 'echo deb [signed-by=/usr/share/keyrings/jenkins.gpg] http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+    echo deb http://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list
     sudo apt update
     sudo apt install jenkins -y
   register: output
@@ -37,11 +38,3 @@
     - jenkins
     - demo-ex
     - demo-ex-jenkins
-
-# 향후 아래와 같은 부분의 코드화가 필요
-# 위 방법으로 jenkins 설치 후 
-# jenkins계정에 docker 실행권한 부여 
-# docker-pipeline, git parameter, workspace cleanup 플러그인 설치
-# git-credential, imageRegistry-credential 생성
-
-# configuration as a code 의 경우 설정 자체만 옮겨지는 듯 함(job은 안됨, 비번들은 옮겨짐)
