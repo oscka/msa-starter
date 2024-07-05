@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: simple-api-ingress
+  namespace: {{SIMPLE_API_NAMESPACE}}
+  annotations:
+    kubernetes.io/ingress.class: {{SIMPLE_API_INGRESS_CLASS}}
+spec:
+  rules:
+  - host: "{{SIMPLE_API_INGRESS_HOST}}"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service: 
+            name: simple-api-svc
+            port: 
+              number: 8080

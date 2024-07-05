@@ -33,6 +33,7 @@ APM_TYPE: "pinpoint" ## type: elastic, pinpoint
 # DEMO_API_NODE_PORT: 30001
 
 DEMO_API_DB_URL: "mysql-svc.db.svc:3306" ## k8s: mysql-svc.db.svc:3306 , k3d-docker: host.k3d.internal:3306, k3s-docker: host.k3s.internal:3306
+SAMPLE_API_DB_URL: "mysql-svc.db.svc:3306" ## k8s: mysql-svc.db.svc:3306 , k3d-docker: host.k3d.internal:3306, k3s-docker: host.k3s.internal:3306
 # DEMO_API_DB_DATABASE: "blackstar"
 # DEMO_API_DB_USERNAME: "blackstar"
 # DEMO_API_DB_PASSWORD: "1234"
@@ -48,6 +49,7 @@ DEMO_API_DB_URL: "mysql-svc.db.svc:3306" ## k8s: mysql-svc.db.svc:3306 , k3d-doc
 
 # DEMO_API_ARGOCD_DEPLOY_TYPE: "rolling" ## default: rolling  deploy_type: rolling, bluegreen, canary
 DEMO_API_ARGOCD_TARGET_REVISION: "pinpoint" ## default: main ,  revision: main, pinpoint
+SAMPLE_API_ARGOCD_TARGET_REVISION: "main" ## default: main ,  revision: main, pinpoint
 
 # # demo-api-loadtest(locust)
 # DEMO_API_LOADTEST_FILE: "/Users/blackstar/dev/workspace/vscode/tools-work/locust/k8s/demo-api.py"

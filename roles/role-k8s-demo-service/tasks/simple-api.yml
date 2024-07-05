@@ -1,0 +1,154 @@
+---
+- name: "[필수사항 체크] simple-api Ingress Controller 설치 여부 체크"
+  shell: | 
+    kubectl get pod -n {{GLB_INGRESS_NAMESPACE}} | grep {{DEMO_API_INGRESS_CLASS}} |wc -l
+  register: output
+  failed_when:  "output.stdout|float < 1"
+  tags:
+    - simple-api
+    - simple-project
+    - simple-ex
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+- name: Create a api namespace
+  kubernetes.core.k8s:
+    name: "{{SIMPLE_API_NAMESPACE}}"
+    api_version: v1
+    kind: Namespace
+    state: present
+  tags: 
+    - simple-api
+    - simple-project
+    - simple-ex
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+#### simple-api-configmap 배포
+- name: simple-api-configmap 배포 
+  kubernetes.core.k8s:
+    state: present
+    template: 
+      - path: "demo/simple-api/simple-api-configmap.yml.j2"
+  tags: 
+    - simple-api-configmap
+    - simple-api
+    - simple-project
+    - simple-ex
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+
+- name: simple-api 배포 
+  kubernetes.core.k8s:
+    state: present
+    template: 
+      - path: "demo/simple-api/simple-api-deploy.yml.j2"
+  register: output
+  tags: 
+    - simple-api
+    - simple-project
+    - simple-ex
+
+#--[output]--
+- debug:
+    var: output
+  tags: 
+    - simple-api
+    - simple-project
+    - simple-ex
+#--[waiting]--
+- name: waiting for pod status Ready
+  shell: kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n "{{SIMPLE_API_NAMESPACE}}"
+  tags:
+    - simple-api
+    - simple-project
+    - simple-ex
+    
+
+- name: simple-ops-argocd-repo-add 
+  shell: |
+    argocd login --insecure {{ARGOCD_HOST}}  --username admin  --password {{ARGOCD_NEW_PASSWORD}} 
+    argocd repo add {{SIMPLE_OPS_REPO_URL}} --username {{SIMPLE_OPS_GIT_USER}} --password {{SIMPLE_OPS_GIT_SECRET}} --insecure-skip-server-verification
+  register: output
+  tags: 
+    - simple-ops-argocd
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+  when: SIMPLE_OPS_REPO_PRIVATE == 'Y'
+
+#--[output]--
+- debug:
+    var: output
+  tags: 
+    - simple-ops-argocd
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+
+- name: simple-api-argocd-application 배포 
+  kubernetes.core.k8s:
+    state: present
+    template: 
+      - path: "demo/simple-api/simple-api-argocd-apps.yml.j2"
+  register: output
+  tags: 
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+#--[output]--
+- debug:
+    var: output
+  tags: 
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+#--[waiting]--
+- name: waiting for pod status Ready
+  shell: |
+    ## argocd가 application 적용후 일정시간 배포 시간이 필요하다 
+    sleep 30 
+
+    kubectl wait pod --timeout=-1s --for=condition=Ready -l '!job-name' -n "{{SIMPLE_API_NAMESPACE}}"
+  tags:   
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+#### simple-api ingress 배포
+- name: simple-api ingress 배포 
+  kubernetes.core.k8s:
+    state: present
+    template: 
+      - path: "demo/simple-api/simple-api-ingress.yml.j2"
+  register: output
+  tags: 
+    - simple-api-ing
+    - simple-api
+    - simple-project
+    - simple-ex
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+#--[output]--
+- debug:
+    var: output
+  tags: 
+    - simple-api-ing
+    - simple-api
+    - simple-project
+    - simple-ex
+    - simple-api-argocd
+    - simple-project-argocd
+    - simple-ex-argocd
+
+
+
+    

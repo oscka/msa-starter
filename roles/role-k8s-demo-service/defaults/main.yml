@@ -67,6 +67,35 @@ DEMO_API_LOADTEST_FILE: "/Users/blackstar/dev/workspace/vscode/tools-work/locust
 
 
 
+##########simple-api-project##############
+SIMPLE_OPS_REPO_URL: "https://github.com/oscka/simple-gitops.git"
+SIMPLE_OPS_REPO_PRIVATE: "N"
+SIMPLE_OPS_GIT_USER: "user-id"
+SIMPLE_OPS_GIT_SECRET: ""
+
+######### simple-api #################
+SIMPLE_API_NAMESPACE: "sample"
+SIMPLE_API_REPLICAS: 2
+SIMPLE_API_INGRESS_CLASS: "nginx"
+SIMPLE_API_INGRESS_HOST: "simple-api.{{HOST_IP}}.sslip.io"
+SIMPLE_API_SERVICE_TYPE: "ClusterIP"
+SIMPLE_API_NODE_PORT: 30001
+
+SIMPLE_API_DB_URL: "mysql-svc.db.svc:3306" ## k8s: mysql-svc.db.svc:3306 , k3d-docker: host.k3d.internal:3306, k3s-docker: host.k3s.internal:3306
+SIMPLE_API_DB_DATABASE: "blackstar"
+SIMPLE_API_DB_USERNAME: "blackstar"
+SIMPLE_API_DB_PASSWORD: "1234"
+
+## simple-api (apm 적용 없을 경우)
+SIMPLE_API_IMAGE: "oscka/simple-api:stable-1.0"
+## simple-api apm 적용시
+SIMPLE_API_IMAGE_ELASTIC_APM: "oscka/simple-api:elastic-apm-v1.0"
+## pinpoint apm 적용시
+SIMPLE_API_IMAGE_PINPOINT_APM: "oscka/simple-api:pinpoint-apm-v1.0"
+
+SIMPLE_API_ARGOCD_DEPLOY_TYPE: "rolling" ## default: rolling  deploy_type: rolling, bluegreen, canary
+SIMPLE_API_ARGOCD_TARGET_REVISION: "main" ## default: main ,  revision: main, pinpoint
+
 
 
 ########## demo-fe #################

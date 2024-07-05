@@ -124,7 +124,7 @@ myuser ALL=NOPASSWD: ALL
 ```bash
 cd playbook
 # 전체 설치
-./run-play.sh  "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, argocd, loki-stack, pinpoint, mysql, demo-api-argocd, demo-fe-argocd"
+./run-play.sh  "tool-basic, helm-repo, k3s, ingress-nginx, jenkins, argocd, loki-stack, pinpoint, mysql, simple-api-argocd"
 
 # 기본 환경만 설치(cluster,kubectl,k9s등)
 ./run-play.sh  "tool-basic, helm-repo, k3s"

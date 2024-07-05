@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-api-configmap
+  namespace: {{SIMPLE_API_NAMESPACE}} 
+  
+data:
+  DB_URL: "{{SIMPLE_API_DB_URL}}"
+  DATABASE: "{{SIMPLE_API_DB_DATABASE}}"
+  USERNAME: "{{SIMPLE_API_DB_USERNAME}}"
+  PASSWORD: "{{SIMPLE_API_DB_PASSWORD}}"
+{% if APM_YN == 'Y' and APM_TYPE == 'elastic'  %} 
+  JAVA_TOOL_OPTIONS: "-javaagent:/app/libs/elastic-apm-agent-1.33.0.jar -Delastic.apm.service_name=demo-api -Delastic.apm.server_urls={{ELASTIC_APM_SERVER_URLS}} -Delastic.apm.secret_token={{ELASTIC_APM_TOKEN}} -Delastic.apm.environment={{ELASTIC_APM_ENVIRONMENT}} -Delastic.apm.application_packages=com.example"
+{% endif %}

@@ -1,0 +1,76 @@
+---
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: simple-api-svc
+  namespace: {{SIMPLE_API_NAMESPACE}}
+spec:
+  selector:
+    app: simple-api
+  
+  ports:
+  - protocol: TCP
+    name: http
+    port: 8080    
+    targetPort: http
+{% if SIMPLE_API_SERVICE_TYPE == 'NodePort' %}
+    nodePort: {{SIMPLE_API_NODE_PORT}}
+  type: NodePort
+{% elif SIMPLE_API_SERVICE_TYPE == 'LoadBalancer'  %}
+  type: LoadBalancer
+{% else %}
+  type: ClusterIP
+{% endif %}
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-api
+  namespace: {{SIMPLE_API_NAMESPACE}}     
+  labels:
+    app: simple-api
+spec:
+  replicas: {{SIMPLE_API_REPLICAS}}
+  selector:
+    matchLabels:
+      app: simple-api
+  template:
+    metadata:      
+      labels:
+        app: simple-api    
+    spec:
+      containers:
+        - name: simple-api
+{% if APM_YN == 'Y' and APM_TYPE == 'elastic' %}     
+          image: {{SIMPLE_API_IMAGE_ELASTIC_APM}}
+{% elif APM_YN == 'Y' and APM_TYPE == 'pinpoint' %}    
+          image: {{SIMPLE_API_IMAGE_PINPOINT_APM}}
+{% else %}
+          image: {{SIMPLE_API_IMAGE}}
+{% endif %}
+          ports:
+          - name: http
+            containerPort: 8080  
+          envFrom:
+            - configMapRef:
+                name: simple-api-configmap
+
+{% if APM_YN == 'Y' and APM_TYPE == 'pinpoint' %} 
+          env:
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP       
+
+          - name: JAVA_TOOL_OPTIONS
+            value: >-
+              -javaagent:/pinpoint-agent-{{PINPOINT_APM_VERSION}}/pinpoint-bootstrap-{{PINPOINT_APM_VERSION}}.jar
+              -Dpinpoint.container
+              -Dpinpoint.applicationName=demo-api
+              -Dpinpoint.agentId=$(POD_IP)
+              -Dpinpoint.profiler.profiles.active={{PINPOINT_APM_PROFILE}}
+              -Dprofiler.transport.grpc.collector.ip={{PINPOINT_APM_COLLECTOR_IP}}
+{% endif %}

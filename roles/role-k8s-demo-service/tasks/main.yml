@@ -6,12 +6,11 @@
   tags: always
   when: ansible_distribution == 'Ubuntu'
 
-
-
 - name: import  demo-api
   import_tasks: demo-api.yml
 
 - name: import  demo-fe
   import_tasks: demo-fe.yml
 
-
+- name: import  simple-api
+  import_tasks: simple-api.yml
